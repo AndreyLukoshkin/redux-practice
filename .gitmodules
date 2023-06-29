@@ -1,0 +1,3 @@
+[submodule "Fake-api-for-lessons"]
+	path = Fake-api-for-lessons
+	url = https://github.com/vosdux/Fake-api-for-lessons.git
