@@ -2,10 +2,10 @@ import React from "react";
 
 import "./styles.css";
 
-const Comment = ({ nickName, text }) => {
+const Comment = ({ nickname, text }) => {
   return (
     <div className="cnCommentRoot">
-      <span className="cnCommentName">{nickName}</span>
+      <span className="cnCommentName">{nickname}</span>
       <span>{text}</span>
     </div>
   );

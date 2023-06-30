@@ -1,3 +1,4 @@
+import cn from "classnames";
 import React, { useState } from "react";
 
 import Comment from "../Comment";
@@ -12,6 +13,7 @@ const DetailedCard = ({
   likes,
   isLikedByYou,
   comments,
+  className,
 }) => {
   const [isCommentsShown, setIsCommentsShown] = useState(false);
 
@@ -29,16 +31,18 @@ const DetailedCard = ({
             comments.length - commentsForRender.length
           } comments`}</span>
           {commentsForRender.map((comment) => (
-            <Comment {...comment} />
+            <Comment {...comment} key={Math.random() * 5000} />
           ))}
         </>
       );
     }
-    return comments.map((comment) => <Comment {...comment} />);
+    return comments.map((comment) => (
+      <Comment {...comment} key={Math.random() * 5000} />
+    ));
   };
 
   return (
-    <div className="cnDetailedCardRoot">
+    <div className={cn("cnDetailedCardRoot", className)}>
       <div className="cnDetailedCardHeader">
         <UserBadge nickName={userName} avatarUrl={avatarUrl} id={userId} />
       </div>
