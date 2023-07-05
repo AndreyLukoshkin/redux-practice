@@ -5,12 +5,15 @@ import { useDispatch, useSelector } from "react-redux";
 
 import DetailedCard from "../../components/DetailedCard";
 import Layout from "../../components/Layout";
+import { mutatePhoto } from "../../redux/actions/photos";
 import { getPhotos } from "../../redux/actions/photos";
 import "./styles.css";
 
 const MainPage = () => {
   const photos = useSelector((state) => state.photos.photos);
   const loading = useSelector((state) => state.photos.isPhotoLoading);
+  const authorizedUser = useSelector((state) => state.users.authorizedUser);
+
   const total = useSelector((state) => state.photos.totalPhotos);
   const dispatch = useDispatch();
 
@@ -25,8 +28,16 @@ const MainPage = () => {
     setPage(page + 1);
   };
 
+  const onLikeClick = (photoId) => {
+    dispatch(mutatePhoto(authorizedUser.id, photoId));
+  };
+
   return (
-    <Layout nickName="Andrii" id={1}>
+    <Layout
+      nickName={authorizedUser.nickname}
+      id={authorizedUser.id}
+      avatarUrl={authorizedUser.avatarUrl}
+    >
       <div className="cnMainPageRoot">
         {loading ? (
           <div className="cnMainLoaderContainer">
@@ -47,14 +58,16 @@ const MainPage = () => {
             {photos.map(({ author, imgUrl, id, likes, comments }) => (
               <DetailedCard
                 key={id}
+                id={id}
                 userName={author.nickname}
                 userId={author.id}
                 avatarUrl={author.avatarUrl}
                 imgUrl={imgUrl}
                 likes={likes.length}
-                isLikedByYou={true}
+                isLikedByYou={likes.includes(authorizedUser.id)}
                 comments={comments}
                 className="cnMainPageCard"
+                onLikeClick={onLikeClick}
               />
             ))}
           </InfiniteScroll>
