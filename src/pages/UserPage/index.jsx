@@ -1,11 +1,51 @@
 import React from "react";
+import { useDispatch, useSelector } from "react-redux";
 
+import Card from "../../components/Card";
 import Layout from "../../components/Layout";
+import UserBio from "../../components/UserBio";
+import { toggleLike } from "../../redux/actions/photos";
+import "./styles.css";
 
 const UserPage = () => {
+  const authorizedUser = useSelector((state) => state.users.authorizedUser);
+  const dispatch = useDispatch();
+
+  const onLikeClick = (photoId) => {
+    dispatch(toggleLike(authorizedUser.id, photoId));
+  };
+
   return (
-    <Layout nickName="asar" id={5}>
-      <div>User Page</div>;
+    <Layout
+      nickName={authorizedUser.nickname}
+      id={authorizedUser.id}
+      avatarUrl={authorizedUser.avatarUrl}
+    >
+      <div className="cnUserPageRoot">
+        <UserBio
+          avatarUrl={authorizedUser.avatarUrl}
+          nickname={authorizedUser.nickname}
+          subscribed={authorizedUser.subscribed.length}
+          subscribers={authorizedUser.subscribers.length}
+          firstName={authorizedUser.firstName}
+          lastName={authorizedUser.lastName}
+          description={authorizedUser.description}
+          url={authorizedUser.url}
+        />
+
+        <div className="cnUserPageRootContent">
+          <Card
+            imgUrl=""
+            className="cnUserPageCard"
+            likes={10}
+            comments={10}
+            isLikedByYou={true}
+            onLikeClick={() => onLikeClick("")}
+          />
+          <Card imgUrl="" className="cnUserPageCard" likes={10} comments={10} />
+          <Card imgUrl="" className="cnUserPageCard" likes={10} comments={10} />
+        </div>
+      </div>
     </Layout>
   );
 };

@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 
 import DetailedCard from "../../components/DetailedCard";
 import Layout from "../../components/Layout";
-import { mutatePhoto } from "../../redux/actions/photos";
+import { sendComment, toggleLike } from "../../redux/actions/photos";
 import { getPhotos } from "../../redux/actions/photos";
 import "./styles.css";
 
@@ -13,8 +13,9 @@ const MainPage = () => {
   const photos = useSelector((state) => state.photos.photos);
   const loading = useSelector((state) => state.photos.isPhotoLoading);
   const authorizedUser = useSelector((state) => state.users.authorizedUser);
-
   const total = useSelector((state) => state.photos.totalPhotos);
+  const mutateLoading = useSelector((state) => state.photos.isMutateLoading);
+
   const dispatch = useDispatch();
 
   const [page, setPage] = useState(1);
@@ -29,7 +30,11 @@ const MainPage = () => {
   };
 
   const onLikeClick = (photoId) => {
-    dispatch(mutatePhoto(authorizedUser.id, photoId));
+    dispatch(toggleLike(authorizedUser.id, photoId));
+  };
+
+  const onCommentSendClick = (photoId, comment) => {
+    dispatch(sendComment(authorizedUser.nickname, photoId, comment));
   };
 
   return (
@@ -68,6 +73,8 @@ const MainPage = () => {
                 comments={comments}
                 className="cnMainPageCard"
                 onLikeClick={onLikeClick}
+                onCommentSendClick={onCommentSendClick}
+                mutateLoading={mutateLoading}
               />
             ))}
           </InfiniteScroll>
