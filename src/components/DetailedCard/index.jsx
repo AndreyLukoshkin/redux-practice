@@ -14,6 +14,8 @@ const DetailedCard = ({
   isLikedByYou,
   comments,
   className,
+  onLikeClick,
+  id,
 }) => {
   const [isCommentsShown, setIsCommentsShown] = useState(false);
 
@@ -51,6 +53,7 @@ const DetailedCard = ({
       </div>
       <div className="cnDetailedCardButtons">
         <i
+          onClick={() => onLikeClick(id)}
           className={`${
             isLikedByYou ? "fas" : "far"
           } fa-heart cnDetailedCardLikeIcon`}
