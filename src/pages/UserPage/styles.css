@@ -16,3 +16,14 @@
 .cnUserPageCard {
   margin: 0 10px 10px 0;
 }
+
+.cnUserPageScroll {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.cnUserPageNoPosts {
+  font-weight: 600;
+  font-size: 20px;
+  margin: auto;
+}

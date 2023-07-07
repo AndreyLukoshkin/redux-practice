@@ -1,6 +1,7 @@
 import cn from "classnames";
 import React, { useState } from "react";
 
+import Button from "../Button";
 import Comment from "../Comment";
 import UserBadge from "../UserBadge";
 import "./styles.css";
@@ -79,13 +80,13 @@ const DetailedCard = ({
           placeholder="write comment"
           className="cnDetailedCardTextArea"
         />
-        <button
+        <Button
           disabled={mutateLoading}
           className="cnDetailedCardSendButton"
           onClick={handleSendCommentClick}
         >
           Comment
-        </button>
+        </Button>
       </div>
     </div>
   );
