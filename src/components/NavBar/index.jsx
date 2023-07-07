@@ -7,7 +7,9 @@ const NavBar = ({ nickName, avatarUrl, id }) => {
   return (
     <div className="cnNavbarRoot">
       <div className="cnNavbarWrapper">
-        <span>insta</span>
+        <a href="/" className="cnNavbarLink">
+          Insta
+        </a>
         <UserBadge nickName={nickName} avatarUrl={avatarUrl} id={id} />
       </div>
     </div>

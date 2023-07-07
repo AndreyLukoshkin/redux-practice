@@ -1,5 +1,6 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 
+import Button from "../Button";
 import UserCounter from "../UserCounter";
 import "./styles.css";
 
@@ -12,7 +13,24 @@ const UserBio = ({
   lastName,
   description,
   url,
+  isMyPage,
+  isSubscribed,
 }) => {
+  const [btnProps, setBtnProps] = useState({
+    onClick: () => false,
+    children: "Subscribe",
+  });
+
+  useEffect(() => {
+    if (isMyPage) {
+      setBtnProps({ onClick: () => false, children: "Edit" });
+    } else if (isSubscribed) {
+      setBtnProps({ onClick: () => false, children: "Unsubscribe" });
+    } else {
+      setBtnProps({ onClick: () => false, children: "Subscribe" });
+    }
+  }, [isMyPage, isSubscribed]);
+
   return (
     <div className="cnUserBioRoot">
       <div>
@@ -21,6 +39,7 @@ const UserBio = ({
       <div className="cnUserBioInfo">
         <div className="cnUserBioRow">
           <span className="cnUserBioNickname">{nickname}</span>
+          <Button {...btnProps} />
         </div>
         <div className="cnUserBioRow">
           <UserCounter count={5} text="Posts" className="cnUserBioCounter" />
