@@ -3,6 +3,7 @@ import React, { useState } from "react";
 
 import Button from "../Button";
 import Comment from "../Comment";
+import PhotoModal from "../PhotoModal";
 import UserBadge from "../UserBadge";
 import "./styles.css";
 
@@ -22,6 +23,7 @@ const DetailedCard = ({
 }) => {
   const [isCommentsShown, setIsCommentsShown] = useState(false);
   const [comment, setComment] = useState("");
+  const [isModalVisible, setIsModalVisible] = useState(false);
 
   const handleSendCommentClick = () => {
     if (comment) {
@@ -69,7 +71,10 @@ const DetailedCard = ({
             isLikedByYou ? "fas" : "far"
           } fa-heart cnDetailedCardLikeIcon`}
         />
-        <i className="fas fa-comment cnDetailedCardLikeComment" />
+        <i
+          className="fas fa-comment cnDetailedCardLikeComment"
+          onClick={() => setIsModalVisible(true)}
+        />
       </div>
       <div className="cnDetailedCardLikes">{`Likes ${likes} people`}</div>
       <div className="cnDetailedCardComments">{renderComments()}</div>
@@ -88,6 +93,14 @@ const DetailedCard = ({
           Comment
         </Button>
       </div>
+      <PhotoModal
+        comments={[]}
+        onClose={() => setIsModalVisible(false)}
+        isOpen={isModalVisible}
+        userName={userName}
+        avatarUrl={avatarUrl}
+        userId={userId}
+      />
     </div>
   );
 };
