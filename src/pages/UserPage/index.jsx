@@ -9,6 +9,7 @@ import Layout from "../../components/Layout";
 import UserBio from "../../components/UserBio";
 import {
   getPostsByUser,
+  sendCommentOnUserPage,
   toggleLikeOnPost,
 } from "../../redux/actions/postsByUser";
 import { getUser } from "../../redux/actions/user";
@@ -22,6 +23,7 @@ const UserPage = () => {
     (state) => state.postsByUser.isPostsLoading
   );
   const isUserLoading = useSelector((state) => state.users.isUserLoading);
+  const mutateLoading = useSelector((state) => state.photos.isMutateLoading);
   const dispatch = useDispatch();
   const { id } = useParams();
 
@@ -42,6 +44,12 @@ const UserPage = () => {
 
   const onLikeClick = (photoId) => {
     dispatch(toggleLikeOnPost(authorizedUser.id, photoId, id));
+  };
+
+  const onCommentSendClick = (photoId, comment) => {
+    dispatch(
+      sendCommentOnUserPage(authorizedUser.nickname, photoId, user.id, comment)
+    );
   };
 
   const nextHandler = () => {
@@ -101,9 +109,18 @@ const UserPage = () => {
                     imgUrl={imgUrl}
                     className="cnUserPageCard"
                     likes={likes.length}
-                    comments={comments.length}
+                    comments={comments}
                     isLikedByYou={likes.includes(authorizedUser.id)}
                     onLikeClick={() => onLikeClick(id)}
+                    userData={{
+                      userName: user.nickname,
+                      avatarUrl: user.avatarUrl,
+                      userId: user.id,
+                    }}
+                    onCommentSubmit={(comment) =>
+                      onCommentSendClick(id, comment)
+                    }
+                    isMutateLoading={mutateLoading}
                   />
                 ))}
               </InfiniteScroll>
