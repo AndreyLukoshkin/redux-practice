@@ -41,7 +41,7 @@ const PageRoutes = () => {
               <Route key={route.path} {...route} />
             ))
           ) : (
-            <Route path="/" element={<NoAccessPage />} exact />
+            <Route path="*" element={<NoAccessPage />} exact />
           )}
         </Routes>
       </BrowserRouter>

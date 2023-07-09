@@ -3,6 +3,7 @@ import { nanoid } from "nanoid";
 import React, { useState } from "react";
 
 import Comment from "../Comment";
+import ImageWithLoader from "../ImageWithLoader";
 import PhotoModal from "../PhotoModal";
 import TextArea from "../TextArea";
 import UserBadge from "../UserBadge";
@@ -70,8 +71,8 @@ const DetailedCard = ({
       <div className="cnDetailedCardHeader">
         <UserBadge nickName={userName} avatarUrl={avatarUrl} id={userId} />
       </div>
-      <div>
-        <img src={imgUrl} alt="img" className="cnDetailedCardImg" />
+      <div className="cnDetailedCardImgWrapper">
+        <ImageWithLoader className="cnDetailedCardImg" src={imgUrl} alt="img" />
       </div>
       <div className="cnDetailedCardButtons">
         <i

@@ -1,6 +1,7 @@
 import cn from "classnames";
 import React, { useState } from "react";
 
+import ImageWithLoader from "../ImageWithLoader";
 import PhotoModal from "../PhotoModal";
 import "./styles.css";
 
@@ -21,7 +22,7 @@ const Card = ({
 
   return (
     <div className={cn("cnCardRoot", className)}>
-      <img src={imgUrl} alt={imgUrl} className="cnCardImage" />
+      <ImageWithLoader className="cnCardImage" src={imgUrl} alt={imgUrl} />
       <div className="cnCardHover" />
       <div className="cnCardIcons">
         <i
