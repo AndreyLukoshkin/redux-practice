@@ -1,8 +1,10 @@
 import cn from "classnames";
+import { nanoid } from "nanoid";
 import React, { useState } from "react";
 
-import Button from "../Button";
 import Comment from "../Comment";
+import PhotoModal from "../PhotoModal";
+import TextArea from "../TextArea";
 import UserBadge from "../UserBadge";
 import "./styles.css";
 
@@ -22,6 +24,7 @@ const DetailedCard = ({
 }) => {
   const [isCommentsShown, setIsCommentsShown] = useState(false);
   const [comment, setComment] = useState("");
+  const [isModalVisible, setIsModalVisible] = useState(false);
 
   const handleSendCommentClick = () => {
     if (comment) {
@@ -44,14 +47,22 @@ const DetailedCard = ({
             comments.length - commentsForRender.length
           } comments`}</span>
           {commentsForRender.map((comment) => (
-            <Comment {...comment} key={Math.random() * 5000} />
+            <Comment {...comment} key={nanoid()} />
           ))}
         </>
       );
     }
-    return comments.map((comment) => (
-      <Comment {...comment} key={Math.random() * 5000} />
-    ));
+    return comments.map((comment) => <Comment {...comment} key={nanoid()} />);
+  };
+
+  const onCloseModal = () => {
+    setComment("");
+    setIsModalVisible(false);
+  };
+
+  const onOpenModal = () => {
+    setComment("");
+    setIsModalVisible(true);
   };
 
   return (
@@ -69,25 +80,36 @@ const DetailedCard = ({
             isLikedByYou ? "fas" : "far"
           } fa-heart cnDetailedCardLikeIcon`}
         />
-        <i className="fas fa-comment cnDetailedCardLikeComment" />
+        <i
+          className="fas fa-comment cnDetailedCardLikeComment"
+          onClick={onOpenModal}
+        />
       </div>
       <div className="cnDetailedCardLikes">{`Likes ${likes} people`}</div>
       <div className="cnDetailedCardComments">{renderComments()}</div>
-      <div className="cnDetailedCardTextAreaWrapper">
-        <textarea
-          value={comment}
-          onChange={(e) => setComment(e.target.value)}
-          placeholder="write comment"
-          className="cnDetailedCardTextArea"
-        />
-        <Button
-          disabled={mutateLoading}
-          className="cnDetailedCardSendButton"
-          onClick={handleSendCommentClick}
-        >
-          Comment
-        </Button>
-      </div>
+      <TextArea
+        value={comment}
+        onChange={setComment}
+        placeholder="write comment"
+        isLoading={mutateLoading}
+        onSubmit={handleSendCommentClick}
+        buttonText="Send"
+      />
+      <PhotoModal
+        comments={comments}
+        onClose={onCloseModal}
+        isOpen={isModalVisible}
+        userName={userName}
+        avatarUrl={avatarUrl}
+        userId={userId}
+        commentValue={comment}
+        setCommentValue={setComment}
+        onCommentSubmit={handleSendCommentClick}
+        isCommentLoading={mutateLoading}
+        imgUrl={imgUrl}
+        isLikedByYou={isLikedByYou}
+        onLikeClick={() => onLikeClick(id)}
+      />
     </div>
   );
 };

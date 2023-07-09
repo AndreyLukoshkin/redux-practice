@@ -1,4 +1,10 @@
 import { api } from "../../api";
+import { getUserPagePostData } from "../../utils";
+import {
+  mutatePhotoFailed,
+  mutatePhotoStarted,
+  mutatePhotoSuccess,
+} from "../actionCreators/photos";
 import {
   getPostsFailed,
   getPostsStarted,
@@ -26,9 +32,7 @@ export const toggleLikeOnPost = (userId, postId, postAuthorId) => {
     try {
       const posts = getState().postsByUser.posts;
 
-      const newPosts = [...posts];
-      const newPostIndex = newPosts.findIndex((post) => post.id === postId);
-      const postForEdit = newPosts[newPostIndex];
+      const { postForEdit, newPosts } = getUserPagePostData(posts, postId);
 
       if (postForEdit.likes.includes(userId)) {
         postForEdit.likes = postForEdit.likes.filter((like) => like !== userId);
@@ -36,7 +40,7 @@ export const toggleLikeOnPost = (userId, postId, postAuthorId) => {
         postForEdit.likes.push(userId);
       }
 
-      await api.postsByUser.mutatePosts({
+      const response = await api.postsByUser.mutatePosts({
         url: `/${postAuthorId}`,
         data: {
           id: postAuthorId,
@@ -44,7 +48,33 @@ export const toggleLikeOnPost = (userId, postId, postAuthorId) => {
         },
       });
 
-      dispatch(getPostsSuccess([newPosts]));
+      dispatch(getPostsSuccess([...response.data.posts]));
     } catch (error) {}
+  };
+};
+
+export const sendCommentOnUserPage = (nickname, postId, postAuthorId, text) => {
+  return async (dispatch, getState) => {
+    dispatch(mutatePhotoStarted());
+    const posts = getState().postsByUser.posts;
+
+    const { postForEdit, newPosts } = getUserPagePostData(posts, postId);
+
+    postForEdit.comments.push({ nickname, text });
+
+    try {
+      const response = await api.postsByUser.mutatePosts({
+        url: `/${postAuthorId}`,
+        data: {
+          id: postAuthorId,
+          posts: newPosts,
+        },
+      });
+
+      dispatch(getPostsSuccess([...response.data.posts]));
+      dispatch(mutatePhotoSuccess());
+    } catch (error) {
+      dispatch(mutatePhotoFailed(error));
+    }
   };
 };
