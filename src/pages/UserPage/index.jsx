@@ -12,7 +12,7 @@ import {
   sendCommentOnUserPage,
   toggleLikeOnPost,
 } from "../../redux/actions/postsByUser";
-import { getUser } from "../../redux/actions/user";
+import { getUser, mutateUser } from "../../redux/actions/user";
 import "./styles.css";
 
 const UserPage = () => {
@@ -25,6 +25,9 @@ const UserPage = () => {
   );
   const isUserLoading = useSelector((state) => state.users.isUserLoading);
   const isUserError = useSelector((state) => state.users.isUserError);
+  const isUserMutateLoading = useSelector(
+    (state) => state.users.isMutateLoading
+  );
   const mutateLoading = useSelector((state) => state.photos.isMutateLoading);
   const dispatch = useDispatch();
   const { id } = useParams();
@@ -65,6 +68,10 @@ const UserPage = () => {
     setPage(page + 1);
   };
 
+  const onEdit = async (data) => {
+    await dispatch(mutateUser(data, user.id));
+  };
+
   return (
     <Layout
       nickName={authorizedUser.nickname}
@@ -90,6 +97,8 @@ const UserPage = () => {
               // eslint-disable-next-line eqeqeq
               isMyPage={id == authorizedUser.id}
               isSubscribed={user.subscribers.includes(authorizedUser.id)}
+              onEdit={onEdit}
+              formLoading={isUserMutateLoading}
             />
           )}
 
