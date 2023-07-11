@@ -12,17 +12,22 @@ import {
   sendCommentOnUserPage,
   toggleLikeOnPost,
 } from "../../redux/actions/postsByUser";
-import { getUser } from "../../redux/actions/user";
+import { getUser, mutateUser } from "../../redux/actions/user";
 import "./styles.css";
 
 const UserPage = () => {
   const authorizedUser = useSelector((state) => state.users.authorizedUser);
   const user = useSelector((state) => state.users.user);
   const posts = useSelector((state) => state.postsByUser.posts);
+  const isPostsError = useSelector((state) => state.postsByUser.isPostsError);
   const isPostsLoading = useSelector(
     (state) => state.postsByUser.isPostsLoading
   );
   const isUserLoading = useSelector((state) => state.users.isUserLoading);
+  const isUserError = useSelector((state) => state.users.isUserError);
+  const isUserMutateLoading = useSelector(
+    (state) => state.users.isMutateLoading
+  );
   const mutateLoading = useSelector((state) => state.photos.isMutateLoading);
   const dispatch = useDispatch();
   const { id } = useParams();
@@ -63,6 +68,10 @@ const UserPage = () => {
     setPage(page + 1);
   };
 
+  const onEdit = async (data) => {
+    await dispatch(mutateUser(data, user.id));
+  };
+
   return (
     <Layout
       nickName={authorizedUser.nickname}
@@ -75,19 +84,23 @@ const UserPage = () => {
         </div>
       ) : (
         <div className="cnUserPageRoot">
-          <UserBio
-            avatarUrl={user.avatarUrl}
-            nickname={user.nickname}
-            subscribed={user.subscribed.length}
-            subscribers={user.subscribers.length}
-            firstName={user.firstName}
-            lastName={user.lastName}
-            description={user.description}
-            url={user.url}
-            // eslint-disable-next-line eqeqeq
-            isMyPage={id == authorizedUser.id}
-            isSubscribed={user.subscribers.includes(authorizedUser.id)}
-          />
+          {!isUserError && (
+            <UserBio
+              avatarUrl={user.avatarUrl}
+              nickname={user.nickname}
+              subscribed={user.subscribed.length}
+              subscribers={user.subscribers.length}
+              firstName={user.firstName}
+              lastName={user.lastName}
+              description={user.description}
+              url={user.url}
+              // eslint-disable-next-line eqeqeq
+              isMyPage={id == authorizedUser.id}
+              isSubscribed={user.subscribers.includes(authorizedUser.id)}
+              onEdit={onEdit}
+              formLoading={isUserMutateLoading}
+            />
+          )}
 
           <div className="cnUserPageRootContent">
             {postsForRender.length ? (
@@ -125,7 +138,9 @@ const UserPage = () => {
                 ))}
               </InfiniteScroll>
             ) : (
-              <p className="cnUserPageNoPosts">User don't have posts</p>
+              !isPostsError && (
+                <p className="cnUserPageNoPosts">User don't have posts</p>
+              )
             )}
           </div>
         </div>

@@ -3,6 +3,7 @@ import { useEffect } from "react";
 import ReactModal from "react-modal";
 
 import Comment from "../Comment";
+import ImageWithLoader from "../ImageWithLoader";
 import TextArea from "../TextArea";
 import UserBadge from "../UserBadge";
 import "./styles.css";
@@ -12,8 +13,8 @@ const PhotoModal = ({
   onClose,
   imgUrl,
   userName,
-  avatarUrl,
   userId,
+  avatarUrl,
   comments,
   commentValue,
   setCommentValue,
@@ -41,7 +42,7 @@ const PhotoModal = ({
     >
       <div className="cnModalRoot">
         <div className="cnModalImgWrapper">
-          <img src={imgUrl} alt={imgUrl} className="cnModalImg" />
+          <ImageWithLoader src={imgUrl} alt={imgUrl} className="cnModalImg" />
         </div>
         <div className="cnModalCommentsBlock">
           <div>

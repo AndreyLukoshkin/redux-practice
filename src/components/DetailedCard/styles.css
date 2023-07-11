@@ -20,9 +20,8 @@
   width: 100%;
 }
 
-.cnDetailedCardButtons {
-  display: flex;
-  padding: 10px;
+.cnDetailedCardImgWrapper {
+  position: relative;
 }
 
 .cnDetailedCardLikes {
